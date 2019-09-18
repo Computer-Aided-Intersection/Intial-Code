@@ -3,6 +3,8 @@
 #include <time.h>
 #include <math.h>
 
+
+
 int main(int argc, char *argv[]){ 
 
 	int i, j;
@@ -42,4 +44,47 @@ for(i = 0; i < n; i++){
 	}
 	
 		
+}
+void QsortRec(float arr[], int first, int last){
+	
+	if(first >= last) return;
+	
+	int pivotPos = partition(arr, first, last);
+	QsortRec(arr, first, pivotPos-1);
+	QsortRec(arr, pivotPos + 1, last);
+	
+}
+
+int partition(float arr[], int first, int last){
+	
+	float pivotVal = arr[last];
+	int i = first - 1, j = last;
+	
+	for(int j = first; j <= last - 1; j++){
+		
+		if(arr[j] < pivotVal){
+			i++;
+			swap(&arr[i], &arr[j]);
+		}
+	}
+	swap(&arr[i + 1], &arr[last]);
+	
+	return i+1;
+}
+
+void swap(float *a, float *b){
+	
+	float temp = *a;
+	*a = *b;
+	*b = temp;
+	
+}
+
+void printArray(float arr[]){
+	int i;
+	printf("\n");
+	for(i = 0; i < 10; i++){
+		printf("%f, ", arr[i]);
+	}
+	printf("\n");
 }
