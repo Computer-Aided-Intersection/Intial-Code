@@ -112,5 +112,6 @@ void OutputToTxt(float times[]){
 	for(i = 0; i < Num_Cars(); i++){
 		fprintf(fp, "Car %d Time = %.5f\n",i, times[i]);
 	}
+	fprintf(fp, "Tritty likes dudes haha");
 	fclose (fp);	
 }
