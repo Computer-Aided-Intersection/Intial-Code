@@ -6,13 +6,12 @@
 
 #ifdef WINDOWS
 #include <direct.h>
-#define GetCurrentDir _getcwd
+#define GetCurrentDir _getcwd  //This is needed for outputting to a txt file
 #else
 #include <unistd.h>
 #define GetCurrentDir getcwd
 #endif
  
-
 #define VARS 3
 
 void QsortRec(float arr[], int first, int last);
