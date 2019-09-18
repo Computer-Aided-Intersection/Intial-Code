@@ -3,15 +3,16 @@
 #include <time.h>
 #include <math.h>
 
-float time ( (float)(vda[i][0]),(float)(vda[i][1]),(float)(vda[i][2])){
+int main(){
+	float v = (float)(vda[i][0]);
+	float d = (float)(vda[i][1]);
+	float a = (float)(vda[i][2]);
+	time[i] = time(v,d,a);
+	
+float time (float v, float d, float a){
 
-for(i = 0; i < n; i++){
-		
-		float v = (float)(vda[i][0]);
-		float d = (float)(vda[i][1]);
-		float a = (float)(vda[i][2]);
-		
+	for(i = 0; i < n; i++){
 		float x = (-v/a);
 		float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
-time [i] = x + y; 
+		time [i] = x + y; 
 }
