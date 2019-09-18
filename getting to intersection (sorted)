@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
 				if(j % 3 == 0)
 					vda[i][j] = ((rand() % 25 ) + 25);// puts random variables in to arraty
 				else if(j % 3 == 1)
-					vda[i][j] = (-500);
+					vda[i][j] =((rand() % 500 ) + 200);
 				else
 					vda[i][j] = rand()%5 + 5;
 			}
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
 			float a = (float)(vda[i][2]);
 
 			float x = (-v/a);
-			float y = sqrt(v*v-2*a*d)/a; //Calculating time to intersection
+			float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
 			time [i] = x + y; 
 
 		}
