@@ -10,9 +10,11 @@ int main(){
 	time[i] = time(v,d,a);
 	
 float time (float v, float d, float a){
-
+	float time;
 	for(i = 0; i < n; i++){
 		float x = (-v/a);
 		float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
-		time [i] = x + y; 
+		time = x + y; 
+	}
+	return time;
 }
