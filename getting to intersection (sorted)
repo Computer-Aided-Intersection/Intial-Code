@@ -11,6 +11,7 @@ void swap(float *a, float *b);
 void printArray(float arr[]);
 int Num_Cars();
 float calculate_Time(float[] vda, int  i);
+void setRandoms(int[][Vars] vda)
 
 int main(int argc, char *argv[]){ 
 
@@ -24,7 +25,7 @@ int main(int argc, char *argv[]){
 	int vda[n][VARS];
 	
 	for(k = 0; k < Num_Cars(); k++){
-		set_Randoms(vda);
+		setRandoms(vda);
 		calculate(time, vda, n); 
 		
 		QsortRec(time, 0, sizeof(time)/sizeof(time[0]) - 1);
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]){
 		
 }
 
-void calculate_Time(float *time, float[] vda, int  size){
+void calculate_Time(float *time, float[][VARS] vda, int  size){
 	float *temp = (int *) malloc(size * sizeof(int));
 	
 	for(int i = 0; i < size; i++){
@@ -51,7 +52,7 @@ void calculate_Time(float *time, float[] vda, int  size){
 	time = temp; //This sets the time pointer to the temp point I made
 }
 
-void setRandoms(int vda[][VARS]){
+void setRandoms(int[][VARS] vda){
 	for(i = 0; i < n; i++){
 		for (j = 0; j < VARS; j++){
 			if(j % 3 == 0)
