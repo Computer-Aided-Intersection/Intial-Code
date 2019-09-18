@@ -15,10 +15,11 @@ int main(int argc, char *argv[]){
 	int n = 10; 
 	float time[n];
 	int size = sizeof(time)/sizeof(time[0]) - 1;
-	int vda[n][2];// allocates space easy way
+	int vda[n][3];// allocates space easy way
 	
 	for(i = 0; i < n; i++){
-		for (j = 0; j < 2; j++){
+		for (j = 0; j < 3; j++){
+			if(j
 			vda[i][j] = ((rand() % 25 ) + 25);// puts random variables in to arraty
 		}
 	}
