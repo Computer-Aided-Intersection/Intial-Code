@@ -19,8 +19,12 @@ int main(int argc, char *argv[]){
 	
 	for(i = 0; i < n; i++){
 		for (j = 0; j < 3; j++){
-			if(j
-			vda[i][j] = ((rand() % 25 ) + 25);// puts random variables in to arraty
+			if(j % 3 == 0)
+				vda[i][j] = ((rand() % 25 ) + 25);// puts random variables in to arraty
+			else if(j % 3 == 1){
+				vda[i][j] = 500;
+			else
+				vda[i][j] = rand()%5 + 5;
 		}
 	}
 	
