@@ -66,8 +66,8 @@ void OutputToTxt(float times[], int pos[]){
 	fp = fopen (buff,"w");
 	fprintf(fp, "%d\n", Num_Cars());
 	for(i = 0; i < Num_Cars(); i++){
-		//fprintf(fp, "%.5f\n", times[i]); //Used for the reading of the txt file
-		fprintf(fp, "Car %d Time = %.5f\n",pos[i], times[i]); //Used for us to see better
+		fprintf(fp, "%.5f, %d\n", times[i], pos[i]); //Used for the reading of the txt file
+		//fprintf(fp, "Car %d Time = %.5f\n",pos[i], times[i]); //Used for us to see better
 	}
 	fclose (fp);	
 }
