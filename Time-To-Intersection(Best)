@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <string.h>
+
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+ 
+
+#define VARS 3
+
+void QsortRec(float arr[], int first, int last);
+int partition(float arr[], int first, int last);
+void swap(float *a, float *b);
+void printArray(float arr[]);
+int Num_Cars();
+float calculate_Time(int vda[VARS]);
+void set_Randoms(int vda[VARS]);
+void OutputToTxt(float times[]);
+
+int main(int argc, char *argv[]){ 
+
+	int i; 
+	float Car_Times[Num_Cars()];
+	int vda[VARS];
+	
+	srand(time(0));
+	for(i = 0; i < Num_Cars(); i++){
+		set_Randoms(vda);
+		//QsortRec(times, 0, sizeof(times)/sizeof(times[0]) - 1);
+		Car_Times[i] = calculate_Time(vda); ;
+	}
+	OutputToTxt(Car_Times);
+}
+float calculate_Time(int vda[VARS]){
+	int i;
+	float v = (float)(vda[0]);
+	float d = (float)(vda[1]);
+	float a = (float)(vda[2]);
+
+	float x = (-v/a);
+	float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
+	return x + y;
+}
+void set_Randoms(int vda[VARS]){
+	vda[0] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
+	vda[1] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
+	vda[2] = rand()%5 + 5;//Puts random Accelerations 5 - 9
+}
+int Num_Cars(){
+	return 100;
+}
+void OutputToTxt(float times[]){
+	int i;
+	char buff[FILENAME_MAX];
+	GetCurrentDir(buff, FILENAME_MAX);
+	strcat(buff, "/CarTimes.txt");
+	FILE * fp; 
+	fp = fopen (buff,"w");
+	fprintf(fp, "%d\n", Num_Cars());
+	for(i = 0; i < Num_Cars(); i++){
+		//fprintf(fp, "%.5f\n", times[i]); //Used for the reading of the txt file
+		fprintf(fp, "Car %d Time = %.5f\n",i, times[i]); //Used for us to see better
+	}
+	fclose (fp);	
+}
+/*void QsortRec(float arr[], int first, int last){
+	if(first >= last) return;
+	
+	int pivotPos = partition(arr, first, last);
+	QsortRec(arr, first, pivotPos-1);
+	QsortRec(arr, pivotPos + 1, last);
+}
+int partition(float arr[], int first, int last){
+	float pivotVal = arr[last];
+	int i = first - 1, j = last;
+	
+	for(int j = first; j <= last - 1; j++){
+		
+		if(arr[j] < pivotVal){
+			i++;
+			swap(&arr[i], &arr[j]);
+		}
+	}
+	swap(&arr[i + 1], &arr[last]);
+	
+	return i+1;
+}
+void swap(float *a, float *b){
+	float temp = *a;
+	*a = *b;
+	*b = temp;
+}*/
