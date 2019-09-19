@@ -6,75 +6,79 @@
 
 #ifdef WINDOWS
 #include <direct.h>
-#define GetCurrentDir _getcwd  //This is needed for outputting to a txt file
+#define GetCurrentDir _getcwd
 #else
 #include <unistd.h>
 #define GetCurrentDir getcwd
 #endif
  
+
 #define VARS 3
 
-void QsortRec(float arr[], int first, int last);
-int partition(float arr[], int first, int last);
-void swap(float *a, float *b);
-void printArray(float arr[]);
+void QsortRec(int pos[], float arr[], int first, int last);
+int partition(int pos[], float arr[], int first, int last);
+void swap(float *a, float *b, int *c, int *d);
 int Num_Cars();
-void calculate_Time(float time[], int vda[][VARS], int size);
-void set_Randoms(int vda[][VARS], int size);
-void OutputToTxt(float times[]);
+float calculate_Time(int vda[VARS]);
+void set_Randoms(int vda[VARS]);
+void OutputToTxt(float times[], int pos[]);
 
 int main(int argc, char *argv[]){ 
 
-	int i, n = 100; 
+	int i; 
 	float Car_Times[Num_Cars()];
-	float times[n];// 1d array 
-	int vda[n][VARS];
+	int vda[VARS];
+	int positions[Num_Cars()];
 	
 	srand(time(0));
 	for(i = 0; i < Num_Cars(); i++){
-		set_Randoms(vda, n);
-		calculate_Time(times, vda, n); 
-		QsortRec(times, 0, sizeof(times)/sizeof(times[0]) - 1);
-		Car_Times[i] = times[0];
+		set_Randoms(vda);
+		Car_Times[i] = calculate_Time(vda);
+		positions[i] = i;
 	}
-	OutputToTxt(Car_Times);
+	QsortRec(positions, Car_Times, 0, sizeof(Car_Times)/sizeof(Car_Times[0]) - 1);
+	OutputToTxt(Car_Times, positions);
 }
-void calculate_Time(float time[], int vda[][VARS], int  size){
+float calculate_Time(int vda[VARS]){
 	int i;
-	for(i = 0; i < size; i++){
-		float v = (float)(vda[i][0]);
-		float d = (float)(vda[i][1]);
-		float a = (float)(vda[i][2]);
+	float v = (float)(vda[0]);
+	float d = (float)(vda[1]);
+	float a = (float)(vda[2]);
 
-		float x = (-v/a);
-		float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
-		time[i] = x + y;
-	}
+	float x = (-v/a);
+	float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
+	return x + y;
 }
-void set_Randoms(int vda[][VARS], int size){
-	int i, j;
-	for(i = 0; i < size; i++){
-		for (j = 0; j < VARS; j++){
-			if(j % 3 == 0)
-				vda[i][j] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
-			else if(j % 3 == 1)
-				vda[i][j] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
-			else
-				vda[i][j] = rand()%5 + 5;//Puts random Accelerations 5 - 9
-		}
-	}
+void set_Randoms(int vda[VARS]){
+	vda[0] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
+	vda[1] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
+	vda[2] = rand()%5 + 5;//Puts random Accelerations 5 - 9
 }
 int Num_Cars(){
-	return 100;
+	return 4;
 }
-void QsortRec(float arr[], int first, int last){
+void OutputToTxt(float times[], int pos[]){
+	int i;
+	char buff[FILENAME_MAX];
+	GetCurrentDir(buff, FILENAME_MAX);
+	strcat(buff, "/CarTimes.txt");
+	FILE * fp; 
+	fp = fopen (buff,"w");
+	fprintf(fp, "%d\n", Num_Cars());
+	for(i = 0; i < Num_Cars(); i++){
+		//fprintf(fp, "%.5f\n", times[i]); //Used for the reading of the txt file
+		fprintf(fp, "Car %d Time = %.5f\n",pos[i], times[i]); //Used for us to see better
+	}
+	fclose (fp);	
+}
+void QsortRec(int pos[], float arr[], int first, int last){
 	if(first >= last) return;
 	
-	int pivotPos = partition(arr, first, last);
-	QsortRec(arr, first, pivotPos-1);
-	QsortRec(arr, pivotPos + 1, last);
+	int pivotPos = partition(pos, arr, first, last);
+	QsortRec(pos, arr, first, pivotPos-1);
+	QsortRec(pos, arr, pivotPos + 1, last);
 }
-int partition(float arr[], int first, int last){
+int partition(int pos[], float arr[], int first, int last){
 	float pivotVal = arr[last];
 	int i = first - 1, j = last;
 	
@@ -82,36 +86,18 @@ int partition(float arr[], int first, int last){
 		
 		if(arr[j] < pivotVal){
 			i++;
-			swap(&arr[i], &arr[j]);
+			swap(&arr[i], &arr[j], &pos[i], &pos[j]);
 		}
 	}
-	swap(&arr[i + 1], &arr[last]);
+	swap(&arr[i + 1], &arr[last], &pos[i + 1], &pos[last]);
 	
 	return i+1;
 }
-void swap(float *a, float *b){
+void swap(float *a, float *b, int *c, int *d){
 	float temp = *a;
 	*a = *b;
 	*b = temp;
-}
-void printArray(float arr[]){
-	int i;
-	printf("\n");
-	for(i = 0; i < 10; i++){
-		printf("%f, ", arr[i]);
-	}
-	printf("\n");
-}
-void OutputToTxt(float times[]){
-	int i;
-	char buff[FILENAME_MAX];
-	GetCurrentDir(buff, FILENAME_MAX);
-	strcat(buff, "/CarTimes.txt");
-	FILE * fp; 
-	fp = fopen (buff,"w");
-	for(i = 0; i < Num_Cars(); i++){
-		fprintf(fp, "Car %d Time = %.5f\n",i, times[i]);
-	}
-	fprintf(fp, "Tritty likes dudes haha");
-	fclose (fp);	
+	int temp2 = *c;
+	*c = *d;
+	*d = temp2;
 }
