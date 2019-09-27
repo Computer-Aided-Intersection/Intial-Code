@@ -47,5 +47,5 @@ int main( int argc, char *argv[] ){
  }
  
  int Num_Cars(){
-	return ((rand() % 5 ) + 10);//give 5-14
+	return ((rand() % 10 ) + 5);//give 5-14
 }
