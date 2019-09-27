@@ -1,17 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
-#include <math.h>
-#include <string.h>
 
-#ifdef WINDOWS
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#else
-#include <unistd.h>
-#define GetCurrentDir getcwd
-#endif
- 
 // stand alone random number generator inht matrix
 
 int Num_Cars();
@@ -25,10 +14,7 @@ int main( int argc, char *argv[] ){
 	srand(time(0));
 	Ran_Mat_Gen(Num_Cars())
 }
- 
- 
- 
- void Ran_Mat_Gen(int Num_Cars){
+void Ran_Mat_Gen(int Num_Cars){
  
 	int i , j;
 	int matrixM = 3;
