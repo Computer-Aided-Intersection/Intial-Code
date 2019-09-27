@@ -23,16 +23,16 @@ int main( int argc, char *argv[] ){
 	int vda[VARS];
 	
 	srand(time(0));
-	Ran_Mat_Gen( int Num_Cars() )
+	Ran_Mat_Gen(Num_Cars())
 }
  
  
  
- void Ran_Mat_Gen( int Num_Cars() ){
+ void Ran_Mat_Gen(int Num_Cars){
  
 	int i , j;
 	int matrixM = 3;
-	int vda [Num_Cars()][matrixM];
+	int vda [Num_Cars][matrixM];
 	srand(time(0));//changes seed for the random number generator	
 	
 	for ( i = 0; i < (Num_Cars()); i++){
