@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <string.h>
+
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+ 
+// stand alone random number generator inht matrix
+
+int Num_Cars();
+void Ran_Mat_Gen( int num_cars );
+
+int main( int argc, char *argv[] ){
+	
+	int i;
+	int vda[VARS];
+	
+	srand(time(0));
+	Ran_Mat_Gen( int num_cars )
+}
+ 
+ 
+ 
+ void Ran_Mat_Gen( int num_cars ){
+ 
+	int i , j;
+	int matrixM = 3;
+	int vda [num_cars][matrixM];
+	srand(time(0));//changes seed for the random number generator	
+	
+	for ( i = 0; i < (num_cars); i++){
+		vda[i][0] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
+		vda[i][1] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
+		vda[i][2] = rand()%5 + 5;//Puts random Accelerations 5 - 9
+	}
+	
+	for (i = 0; i < num_cars; i++) {
+			printf("%d  %d  %d \n", vda[i][0] , vda[i][1] , vda[i][2] ); 	
+	}
+ }
+ 
+ int Num_Cars(){
+	return ((rand() % 5 ) + 10);//give 5-14
+}
