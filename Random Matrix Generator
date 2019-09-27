@@ -42,7 +42,7 @@ int main( int argc, char *argv[] ){
 	}
 	
 	for (i = 0; i < Num_Cars(); i++) {
-			printf("%d  %d  %d \n", vda[i][0] , vda[i][1] , vda[i][2] ); 	
+		printf("%d  %d  %d \n", vda[i][0] , vda[i][1] , vda[i][2] ); 	
 	}
  }
  
