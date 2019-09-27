@@ -15,7 +15,7 @@
 // stand alone random number generator inht matrix
 
 int Num_Cars();
-void Ran_Mat_Gen( int num_cars );
+void Ran_Mat_Gen( int Num_Cars() );
 
 int main( int argc, char *argv[] ){
 	
@@ -23,25 +23,25 @@ int main( int argc, char *argv[] ){
 	int vda[VARS];
 	
 	srand(time(0));
-	Ran_Mat_Gen( int num_cars )
+	Ran_Mat_Gen( int Num_Cars() )
 }
  
  
  
- void Ran_Mat_Gen( int num_cars ){
+ void Ran_Mat_Gen( int Num_Cars() ){
  
 	int i , j;
 	int matrixM = 3;
-	int vda [num_cars][matrixM];
+	int vda [Num_Cars()][matrixM];
 	srand(time(0));//changes seed for the random number generator	
 	
-	for ( i = 0; i < (num_cars); i++){
+	for ( i = 0; i < (Num_Cars()); i++){
 		vda[i][0] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
 		vda[i][1] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
 		vda[i][2] = rand()%5 + 5;//Puts random Accelerations 5 - 9
 	}
 	
-	for (i = 0; i < num_cars; i++) {
+	for (i = 0; i < Num_Cars(); i++) {
 			printf("%d  %d  %d \n", vda[i][0] , vda[i][1] , vda[i][2] ); 	
 	}
  }
