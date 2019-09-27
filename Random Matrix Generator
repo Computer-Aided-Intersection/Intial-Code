@@ -15,7 +15,7 @@
 // stand alone random number generator inht matrix
 
 int Num_Cars();
-void Ran_Mat_Gen( int Num_Cars() );
+void Ran_Mat_Gen(int Num_Cars);
 
 int main( int argc, char *argv[] ){
 	
