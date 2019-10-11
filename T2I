@@ -17,11 +17,11 @@ struct Group{
 int partition(float arr[], int *data[VARS], int first, int last, int size);
 void swap(float *a, float *b, int c[], int d[], int size);
 void QsortRec(int index, int first, int last);
-void Set_Data(int size);
 float calculate_Time(int vda[VARS]);
-void set_Randoms(int vda[VARS]);
-void printGroups();
 void intializeGroups(int NumCars);
+void set_Randoms(int vda[VARS]);
+void Set_Data(int size);
+void printGroups();
 int getNumCars();
 
 const char* directionNames[] = {"North", "East", "South", "West"};
@@ -36,9 +36,11 @@ int main(int argc, char *argv[]){
 	srand(time(0));
 	intializeGroups(NumCars);
 	Set_Data(NumCars);
-	
+	printf("_________________________________Before_____________________________________\n\n");
+	printGroups();
+	printf("_________________________________After______________________________________\n\n");
 	for(i = 0; i < DIR; i++)
-		QsortRec(i, 0, sizeof(groups[i].time)/sizeof(groups[i].time[0]) - 1);
+		QsortRec(i, 0, groups[i].NumCars - 1);
 	printGroups();
 	
 	return 0;
@@ -78,7 +80,7 @@ float calculate_Time(int vda[VARS]){
 	return x + y;
 }
 int getNumCars(){
-	return rand() % 10 + 5;
+	return rand() % 20 + 5;
 }
 void set_Randoms(int vda[VARS]){
 	vda[0] = (rand() % 25 ) + 25;// puts random velocities in 25-49
@@ -113,7 +115,8 @@ int partition(float arr[], int *data[VARS], int first, int last, int size){
 			swap(&arr[i], &arr[j], data[i], data[j], size);			
 		}
 	}
-	swap(&arr[i + 1], &arr[last], data[i + 1], data[last], size);
+	if(size != 1)
+		swap(&arr[i + 1], &arr[last], data[i + 1], data[last], size);
 	
 	return i+1;
 }
@@ -138,5 +141,3 @@ void intializeGroups(int NumCars){
 		groups[i].NumCars = NumCars;
 	}
 }
-
-
