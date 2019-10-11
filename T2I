@@ -3,40 +3,72 @@
 #include <time.h>
 #include <math.h>
 
-#define VARS 3
+#define VARS 4
+#define DIR 4
 
-void QsortRec(int pos[], float arr[], int first, int last);
-int partition(int pos[], float arr[], int first, int last);
-void swap(float *a, float *b, int *c, int *d);
-int getNumCars();
+enum direction{North, East, South, West};
+struct Group{
+	int NumCars;
+	int **data;
+	float *time;
+	enum direction d;
+};
+
+int partition(float arr[], int *data[VARS], int first, int last, int size);
+void swap(float *a, float *b, int c[], int d[], int size);
+void QsortRec(int index, int first, int last);
+void Set_Data(int size);
 float calculate_Time(int vda[VARS]);
 void set_Randoms(int vda[VARS]);
-void set_data(int NumCars, int data[][VARS], int vda[VARS], int i);
-//void OutputToTxt(float times[], int pos[]);
-void printArray(int num_cars, int data[num_cars][VARS], float time[], int pos[]);
+void printGroups();
+void intializeGroups(int NumCars);
+int getNumCars();
+
+const char* directionNames[] = {"North", "East", "South", "West"};
+struct Group groups[DIR];
 
 int main(int argc, char *argv[]){ 
 
 	int i; 
 	int NumCars = getNumCars();
-	float Car_Times[NumCars];
-	int Data[NumCars][VARS];
-	int vda[VARS];
-	int positions[NumCars];
+	int NESW[DIR] = {0,0,0,0};
 	
 	srand(time(0));
-	for(i = 0; i < NumCars; i++){
-		set_Randoms(vda);
-		set_data(NumCars, Data, vda, i);
-		Car_Times[i] = calculate_Time(vda);
-		positions[i] = i;
-	}
-	QsortRec(positions, Car_Times, 0, sizeof(Car_Times)/sizeof(Car_Times[0]) - 1);
-	printArray(NumCars, Data, Car_Times, positions);
-	//OutputToTxt(Car_Times, positions);
+	intializeGroups(NumCars);
+	Set_Data(NumCars);
+	
+	for(i = 0; i < DIR; i++)
+		QsortRec(i, 0, sizeof(groups[i].time)/sizeof(groups[i].time[0]) - 1);
+	printGroups();
+	
+	return 0;
 }
+void Set_Data(int size){
+	int NESW[DIR] = {0,0,0,0};
+	int vda[VARS];
+	int i, j, k;
+	for(i = 0; i < size; i++){
+		set_Randoms(vda);
+		for(j = 0; j < DIR; j++){
+			if(vda[3] == j){
+				groups[j].time[NESW[j]] = calculate_Time(vda);
+				groups[j].d = j;
+				for(k = 0; k < VARS; k++){
+					groups[j].data[NESW[j]][k] = vda[k];
+				}
+				NESW[j]++;
+				break;
+			}
+		}
+	}
+	for(i = 0; i < DIR; i++){
+		groups[i].NumCars = NESW[i];
+		groups[i].data = (int **)realloc(groups[i].data, NESW[i] * VARS * sizeof(int));
+		groups[i].time = (float *)realloc(groups[i].time, NESW[i] * sizeof(float));
+	}
+}
+
 float calculate_Time(int vda[VARS]){
-	int i;
 	float v = (float)(vda[0]);
 	float d = (float)(vda[1]);
 	float a = (float)(vda[2]);
@@ -45,48 +77,32 @@ float calculate_Time(int vda[VARS]){
 	float y = sqrt(v*v-2*a*d*-1)/a; //Calculating time to intersection
 	return x + y;
 }
-void set_data(int NumCars, int data [NumCars][VARS], int vda[VARS], int index){
-	data[index][0] = vda[0];
-	data[index][1] = vda[1];
-	data[index][2] = vda[2];
-}
-void set_Randoms(int vda[VARS]){
-	vda[0] = ((rand() % 25 ) + 25);// puts random velocities in 25-49
-	vda[1] =((rand() % 500 ) + 200);// Puts random distances in 200 - 699
-	vda[2] = rand()%5 + 5;//Puts random Accelerations 5 - 9
-}
 int getNumCars(){
 	return rand() % 10 + 5;
 }
-void printArray(int num_cars, int data[num_cars][VARS], float time[], int pos[]){
+void set_Randoms(int vda[VARS]){
+	vda[0] = (rand() % 25 ) + 25;// puts random velocities in 25-49
+	vda[1] =(rand() % 500 ) + 200;// Puts random distances in 200 - 699
+	vda[2] = (rand() % 5) + 5;//Puts random Accelerations 5 - 9
+	vda[3] = rand() % 4;
+}
+void printGroups(){
 	int i, j;
-	for(i = 0; i < num_cars; i++){
-		printf("Car %d: V = %d\tD = %d\tA = %d\tTime = %.2f\n", pos[i], data[i][0], data[i][1], data[i][2], time[i]);
+	for(i = 0; i < DIR; i++){
+		for(j = 0; j < groups[i].NumCars; j++){
+			printf("Car %d: V = %d\tD = %d\tA = %d\tTime = %.2f\tDirection = %s\n", j + 1, groups[i].data[j][0], groups[i].data[j][1], groups[i].data[j][2], groups[i].time[j],  directionNames[groups[i].data[j][3]]);
+		}
+		printf("\n");
 	}
 }
-
-/*void OutputToTxt(float times[], int pos[]){
-	int i;
-	char buff[FILENAME_MAX];
-	GetCurrentDir(buff, FILENAME_MAX);
-	strcat(buff, "/CarTimes.txt");
-	FILE * fp; 
-	fp = fopen (buff,"w");
-	fprintf(fp, "%d\n", Num_Cars());
-	for(i = 0; i < Num_Cars(); i++){
-		//fprintf(fp, "%.5f\n", times[i]); //Used for the reading of the txt file
-		fprintf(fp, "Car %d Time = %.5f\n",pos[i], times[i]); //Used for us to see better
-	}
-	fclose (fp);	
-}*/
-void QsortRec(int pos[], float arr[], int first, int last){
+void QsortRec(int i, int first, int last){
 	if(first >= last) return;
 	
-	int pivotPos = partition(pos, arr, first, last);
-	QsortRec(pos, arr, first, pivotPos-1);
-	QsortRec(pos, arr, pivotPos + 1, last);
+	int pivotPos = partition(groups[i].time, groups[i].data, first, last, groups[i].NumCars);
+	QsortRec(i, first, pivotPos - 1);
+	QsortRec(i, pivotPos + 1, last);
 }
-int partition(int pos[], float arr[], int first, int last){
+int partition(float arr[], int *data[VARS], int first, int last, int size){
 	float pivotVal = arr[last];
 	int i = first - 1, j = last;
 	
@@ -94,18 +110,33 @@ int partition(int pos[], float arr[], int first, int last){
 		
 		if(arr[j] < pivotVal){
 			i++;
-			swap(&arr[i], &arr[j], &pos[i], &pos[j]);
+			swap(&arr[i], &arr[j], data[i], data[j], size);			
 		}
 	}
-	swap(&arr[i + 1], &arr[last], &pos[i + 1], &pos[last]);
+	swap(&arr[i + 1], &arr[last], data[i + 1], data[last], size);
 	
 	return i+1;
 }
-void swap(float *a, float *b, int *c, int *d){
+void swap(float *a, float *b, int c[], int d[], int size){
+	int i;
 	float temp = *a;
 	*a = *b;
 	*b = temp;
-	int temp2 = *c;
-	*c = *d;
-	*d = temp2;
+	for(i = 0; i < size; i++){
+		int temp = c[i];
+		c[i] = d[i];
+		d[i] = temp;
+	}
 }
+void intializeGroups(int NumCars){
+	int i, j;
+	for(i = 0; i < DIR; i++){
+		groups[i].time = (float *)malloc(sizeof(float) * NumCars);
+		groups[i].data = (int **)malloc(NumCars * sizeof(int *));
+		for(j = 0; j < NumCars; j++)
+			groups[i].data[j] = (int *)malloc(VARS * sizeof(int)); 
+		groups[i].NumCars = NumCars;
+	}
+}
+
+
